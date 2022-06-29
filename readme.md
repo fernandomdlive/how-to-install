@@ -135,6 +135,11 @@ bundle exec rake roles:enable_csa_access_for_old_csa_roles
 bundle exec rails runner "Provider.all.each {|p| ProviderProfile.create(user_id: p.id, ped_from_age: 3, ped_to_age: 15) }"
 ```
 
+Run the script 
+```bash
+bash db.sh
+```
+
 After that enter the database and run the following content
 
 ```bash
@@ -144,16 +149,19 @@ VALUES
 
 ```
 
-After that copy the content of suffix.rb and paste it the rails console inside stern
+After that copy the content of suffix.rb and paste it the rails console inside stern.
+
 After that run in the same rails console
 
 ```bash
 Provider.all.each {|p| p.create_provider_detail!(billing_suffix: "MD") if p.provider_detail.blank?}
 ```
 
+Add the following alias in the .bashrc
+
 ```bash
-alitas stern='cd /home/vagrant/apps/stern && bundle exec rails s -p 3001 -b 0.0.0.0'
-alitas pportal='cd /home/vagrant/apps/provider-portal && bundle exec rails s -p 3005 -b 0.0.0.0'
+alias stern='cd /home/vagrant/apps/stern && bundle exec rails s -p 3001 -b 0.0.0.0'
+alias pportal='cd /home/vagrant/apps/provider-portal && bundle exec rails s -p 3005 -b 0.0.0.0'
 ```
 
 ```bash
