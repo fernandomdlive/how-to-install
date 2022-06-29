@@ -175,3 +175,10 @@ drop database telehealth_development;
 drop database versions_development;
 drop database workflow_engine_development;
 ```
+
+Finally go to browser in http://localhost:3005/login
+
+```bash
+User: demoprovider1 
+Password: mdlive123
+```
