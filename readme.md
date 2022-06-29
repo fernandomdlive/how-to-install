@@ -19,8 +19,9 @@ config.vm.network :forwarded_port, guest: 3306, host: 3306
 ```bash
 vagrant up
 ```
-
+```bash
 mysql -u root < /home/vagrant/apps/stern/db/seeds/sso_dev.sql
+```
 
 Add this to a script call it something like database.sh
 
@@ -116,11 +117,38 @@ bundle exec rake db:load_fixtures FIXTURES=widget_roles
 bundle exec rake db:load_fixtures FIXTURES=widgets
 ```
 
-Execute the script
-
-fixtures
+Execute the script (fixtures.sh)
 ```bash
 bash fixtures.sh
+```
+
+After that add this to script (db.sh), add the following content
+
+```bash
+bundle exec rake mdlive:create_patients
+bundle exec rake mdlive:create_ca_patients
+bundle exec rake mdlive:create_providers
+bundle exec rake mdlive:create_ca_providers
+bundle exec rake mdlive:create_csa_agents
+bundle exec rake roles:add_roles_to_csa
+bundle exec rake roles:enable_csa_access_for_old_csa_roles
+bundle exec rails runner "Provider.all.each {|p| ProviderProfile.create(user_id: p.id, ped_from_age: 3, ped_to_age: 15) }"
+```
+
+After that enter the database and run the following content
+
+```bash
+INSERT INTO `user_types` (`name`, `can_admin_system`, `can_admin_physicians`, `can_see_patients`, `can_admin_cs_reps`, `can_help_customers`, `can_admin_sales_reps`, `can_process_sales`, `can_manage_account`, `can_fulfill`, `can_fulfill_pharmacy`, `can_admin_pharmacy`, `can_message`, `start_page`, `created_at`, `updated_at`, `can_super_admin`, `csa_enabled`)
+VALUES
+	('Workflow Admin', 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 'customer_service', '2022-06-10 10:56:28', '2022-06-10 10:56:28', 0, 1);
+
+```
+
+After that copy the content of suffix.rb and paste it the rails console inside stern
+After that run in the same rails console
+
+```bash
+Provider.all.each {|p| p.create_provider_detail!(billing_suffix: "MD") if p.provider_detail.blank?}
 ```
 
 ```bash
