@@ -182,3 +182,16 @@ Finally go to browser in http://localhost:3005/login
 User: demoprovider1 
 Password: mdlive123
 ```
+
+
+Extras.
+
+ster provider-portal
+
+en ster
+bundle exec rails dbconsole (primer error)
+ 
+pegar suffix rb en console (segundo error)
+
+2.7.4 
+.ruby_version
